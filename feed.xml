@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>ModernBlog</title>
+    <link>https://example.com/</link>
+    <description>Insights on technology, design and web development.</description>
+    <language>en-us</language>
+    <item>
+      <title>Building Beautiful and Functional Blog Interfaces</title>
+      <link>https://example.com/posts/design.html</link>
+      <description>Discover the principles behind creating blog interfaces that readers love.</description>
+      <pubDate>Tue, 11 Jun 2025 12:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>The Future of Web Development: Trends to Watch</title>
+      <link>https://example.com/posts/future-web.html</link>
+      <description>An in-depth look at emerging technologies shaping the future of web development.</description>
+      <pubDate>Wed, 04 Jun 2025 12:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>A Complete Guide to Modern CSS Layouts</title>
+      <link>https://example.com/posts/css-layouts.html</link>
+      <description>Master CSS Grid and Flexbox with practical examples and best practices.</description>
+      <pubDate>Mon, 26 May 2025 12:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
