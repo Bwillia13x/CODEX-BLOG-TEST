@@ -20,9 +20,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.xml">
-    <script defer src="nav.js"></script>
-    <script defer src="advanced.js"></script>
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/feed.xml">
+    <script defer src="/js/nav.js"></script>
+    <script defer src="/js/advanced.js"></script>
     <style>
         /* CSS Custom Properties for Theming */
         :root {
@@ -700,197 +700,12 @@
 </head>
 <body>
     <a href="#mainContent" class="skip-link">Skip to content</a>
-    <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
     </div>
-
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="index.html" class="logo" onclick="showHomepage(event)">ModernBlog</a>
-            <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="index.html">Articles</a>
-                <a href="archive.html">Archive</a>
-                <a href="topics.html">Topics</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-                <a href="bookmarks.html">Bookmarks</a>
-                <a href="search.html">Search</a>
-                <a href="login.html" id="accountLink">Login</a>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon">
-                        <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="moonIcon" style="display: none;">
-                        <path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/>
-                    </svg>
-                </button>
-            </div>
-            <input type="search" id="searchInput" class="search-input" placeholder="Search..." aria-label="Search posts">
-        </nav>
-    </header>
-
-    <!-- Main Content (Homepage) -->
-    <main id="mainContent">
-        <section class="hero">
-            <h1>Thoughts & Ideas</h1>
-            <p>Exploring technology, design, and the art of building digital experiences that matter.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit" class="btn-primary">Subscribe</button>
-            </form>
-        </section>
-
-        <section class="featured-section">
-            <h2 class="section-title">Featured Articles</h2>
-            <div class="featured-grid">
-                <!-- Post 1 -->
-                <article class="post-card" data-id="design" data-category="design" onclick="showArticle()">
-                    <img src="https://placehold.co/600x300/3b82f6/ffffff?text=Design" alt="Abstract design shapes" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
-                    <div class="post-content">
-                        <div class="post-meta"><span class="post-category">Design</span><span>•</span><span>5 min read</span></div>
-                        <h3 class="post-title">Building Beautiful and Functional Blog Interfaces</h3>
-                        <p class="post-excerpt">Discover the principles behind creating blog interfaces that readers love, combining aesthetics with usability.</p>
-                        <a href="#" class="read-more" onclick="event.stopPropagation(); showArticle();">Read more →</a>
-                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('design')">&#9734;</button>
-                    </div>
-                </article>
-                <!-- Post 2 -->
-                <article class="post-card" data-id="future-web" data-category="technology">
-                    <img src="https://placehold.co/600x300/60a5fa/ffffff?text=Tech" alt="Circuit board pattern" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
-                    <div class="post-content">
-                        <div class="post-meta"><span class="post-category">Technology</span><span>•</span><span>8 min read</span></div>
-                        <h3 class="post-title">The Future of Web Development: Trends to Watch</h3>
-                        <p class="post-excerpt">An in-depth look at emerging technologies and methodologies shaping the future of web development.</p>
-                        <a href="#" class="read-more">Read more →</a>
-                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('future-web')">&#9734;</button>
-                    </div>
-                </article>
-                <!-- Post 3 -->
-                <article class="post-card" data-id="css-layouts" data-category="tutorial">
-                    <img src="https://placehold.co/600x300/34d399/ffffff?text=Tutorial" alt="Code on a screen" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
-                    <div class="post-content">
-                        <div class="post-meta"><span class="post-category">Tutorial</span><span>•</span><span>12 min read</span></div>
-                        <h3 class="post-title">A Complete Guide to Modern CSS Layouts</h3>
-                        <p class="post-excerpt">Master CSS Grid and Flexbox with practical examples and best practices for responsive design.</p>
-                        <a href="#" class="read-more">Read more →</a>
-                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('css-layouts')">&#9734;</button>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </main>
-
-    <!-- Article Page (Hidden by default) -->
-    <article id="articlePage" style="display: none;">
-        <!-- Table of Contents (for large screens) -->
-        <aside class="toc">
-            <h3 class="toc-title">Contents</h3>
-            <ul class="toc-list" id="tocList"></ul>
-        </aside>
-        
-        <div class="article-container">
-            <header class="article-header">
-                <div class="article-meta">
-                    <div class="author-info">
-                        <img src="https://placehold.co/96x96/3b82f6/ffffff?text=JD" alt="Author Jane Doe" class="author-avatar" onerror="this.onerror=null;this.src='https://placehold.co/96x96/cccccc/ffffff?text=JD';">
-                        <div class="author-details">
-                            <span class="author-name">Jane Doe</span>
-                            <span class="publish-date">June 11, 2025</span>
-                        </div>
-                    </div>
-                    <div class="reading-time">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <span>5 min read</span>
-                    </div>
-                </div>
-                <h1 class="article-title">Building Beautiful and Functional Blog Interfaces</h1>
-                <p class="article-subtitle">Discover the principles behind creating blog interfaces that readers love, combining aesthetics with usability.</p>
-            </header>
-
-            <div class="article-content">
-                <p>Creating a successful blog interface requires more than just good looks. It's about finding the perfect balance between <strong>aesthetics and functionality</strong>, ensuring that your readers have an enjoyable experience while consuming your content.</p>
-
-                <h2 id="principles">Core Design Principles</h2>
-                <p>When designing a blog interface, several key principles should guide your decisions. First and foremost is <strong>readability</strong>. Your content should be easy to read, with appropriate font sizes, line heights, and contrast ratios.</p>
-
-                <blockquote>"Good design is as little design as possible." - Dieter Rams</blockquote>
-
-                <p>Typography plays a crucial role in blog design. Choose fonts that are not only beautiful but also highly legible across different devices and screen sizes. A combination of a sans-serif font for UI elements and a serif font for body text often works well.</p>
-
-                <img src="https://placehold.co/1200x600/f3f4f6/6b7280?text=Typography+Example" alt="Example of clean typography" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/cccccc/ffffff?text=Image+Error';">
-
-                <h2 id="layout">Layout and Structure</h2>
-                <p>The layout of your blog should guide readers naturally through your content. Use visual hierarchy to emphasize important elements and create a clear reading path. White space is your friend – it gives content room to breathe and reduces cognitive load.</p>
-
-                <h3 id="grid">Grid Systems</h3>
-                <p>Implementing a consistent grid system helps maintain visual harmony across your blog. Whether you choose a 12-column grid or something simpler, consistency is key to professional-looking design.</p>
-
-                <h2 id="performance">Performance Matters</h2>
-                <p>A beautiful design means nothing if your blog takes forever to load. Optimize images, minimize HTTP requests, and leverage browser caching to ensure your blog loads quickly. Consider implementing lazy loading for images.</p>
-
-                <pre><code class="language-js">// Example: Lazy loading implementation
-const images = document.querySelectorAll('img[data-src]');
-const imageObserver = new IntersectionObserver((entries) =&gt; {
-    entries.forEach(entry =&gt; {
-        if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            imageObserver.unobserve(img);
-        }
-    });
-});
-images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
-
-                <h2 id="engagement">Enhancing Reader Engagement</h2>
-                <p>Interactive elements can significantly boost reader engagement. Consider adding features like: progress indicators, estimated reading times, a table of contents, social sharing buttons, and comment sections to foster community discussion.</p>
-
-                <h2 id="responsive">Responsive Design</h2>
-                <p>With mobile traffic often exceeding desktop, responsive design is non-negotiable. Your blog should look and function beautifully on screens of all sizes. Test thoroughly across devices and consider mobile-first design principles.</p>
-
-                <h2 id="conclusion">Conclusion</h2>
-                <p>Building a beautiful and functional blog interface is an iterative process. Start with solid foundations, gather feedback from your readers, and continuously refine your design. Remember, the best blog design is one that gets out of the way and lets your content shine.</p>
-            </div>
-
-            <button id="clapBtn" class="btn-primary" style="margin-top:2rem;" onclick="addClap()">👏 <span id="clapCount">0</span></button>
-            <div class="share-section">
-                <h3 class="share-title">Share this article</h3>
-                <div class="share-buttons">
-                    <a href="#" class="share-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                        <span>Twitter</span>
-                    </a>
-                    <a href="#" class="share-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                        <span>LinkedIn</span>
-                    </a>
-                    <a href="#" class="share-btn copy-link-btn">
-                         <svg width="16" height="16" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                         <span>Copy Link</span>
-                    </a>
-                </div>
-            </div>
-            <nav class="post-nav" style="margin-top:2rem;">
-                <a href="index.html#future-web">← Previous</a>
-                <a href="index.html#css-layouts" style="float:right;">Next →</a>
-            </nav>
-            <div id="related" style="margin-top:2rem;"></div>
-            <div class="comments-section">
-                <h3>Join the conversation</h3>
-                <form id="commentForm" class="comment-form">
-                    <input type="text" id="commentName" placeholder="Your name" required>
-                    <textarea id="commentText" placeholder="Your comment" required></textarea>
-                    <button type="submit" class="btn-primary">Post Comment</button>
-                </form>
-                <ul id="commentList" class="comment-list"></ul>
-            </div>
-        </div>
-    </article>
-
+    {% include "header.njk" %}
+    {{ content | safe }}
+    {% include "footer.njk" %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Theme Toggle ---
@@ -1230,6 +1045,7 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
+    document.getElementById("year")?.textContent = new Date().getFullYear();
     </script>
     <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 </body>

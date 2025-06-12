@@ -1,0 +1,26 @@
+---
+layout: base.njk
+title: Archive
+---
+
+<main>
+    <section class="archive-hero">
+        <h1>All Articles</h1>
+        <p>Explore every post we’ve published, sorted by date.</p>
+    </section>
+
+    <div class="archive-filter">
+        <label for="yearSelect" class="visually-hidden">Filter by year</label>
+        <select id="yearSelect">
+            <option value="all">All Years</option>
+        </select>
+    </div>
+
+    <section class="archive-section">
+        <div class="archive-inner">
+            <ul class="archive-list" id="archiveList">
+                <!-- Items inserted via JS -->
+            </ul>
+        </div>
+    </section>
+</main>

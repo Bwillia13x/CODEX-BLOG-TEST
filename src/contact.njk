@@ -1,0 +1,29 @@
+---
+layout: base.njk
+title: Contact
+---
+
+<main>
+    <section class="contact-hero">
+        <h1>Get in Touch</h1>
+        <p>We’d love to hear from you! Use the form below or reach out through social media.</p>
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-inner">
+            <form class="contact-form" id="contactForm" novalidate>
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn-primary">Send Message</button>
+                <div id="formResponse" style="display:none;"></div>
+            </form>
+
+            <div class="contact-links">
+                <a href="mailto:hello@example.com"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 13.065L2.4 6H21.6L12 13.065z"/><path d="M21 8.435v9.565H3V8.435l9 6.13 9-6.13z"/></svg> Email Us</a>
+                <a href="https://twitter.com" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045C7.69 8.095 4.062 6.135 1.633 3.156.343 5.369.964 8.264 3.156 9.73c-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg> Twitter</a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 0h-14C2.239 0 0 2.239 0 5v14c0 2.761 2.239 5 5 5h14c2.76 0 5-2.239 5-5V5c0-2.761-2.24-5-5-5zm-11 19H5V8h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0V19h-3V8h3v1.765c1.396-2.586 7-2.777 7 2.476V19z"/></svg> LinkedIn</a>
+            </div>
+        </div>
+    </section>
+</main>
