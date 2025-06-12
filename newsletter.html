@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Subscribe to the ModernBlog newsletter.">
+    <title>Newsletter Signup • ModernBlog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <script defer src="nav.js"></script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e5e7eb;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --shadow-hover: rgba(0, 0, 0, 0.1);
+            --max-width: 1200px;
+            --radius: 0.75rem;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #121212;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-tertiary: #9ca3af;
+            --accent: #60a5fa;
+            --accent-hover: #93bbfc;
+            --border: #374151;
+            --shadow: rgba(0, 0, 0, 0.2);
+            --shadow-hover: rgba(0, 0, 0, 0.3);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6; display: flex; flex-direction: column; min-height: 100vh;}
+        header{background:var(--bg-primary-translucent,rgba(255,255,255,0.8));border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+        nav{max-width:var(--max-width);margin:0 auto;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+        .logo{font-size:1.5rem;font-weight:700;color:var(--text-primary);text-decoration:none;}
+        .nav-links{display:flex;gap:1.5rem;align-items:center;}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:color 0.3s;padding:0.5rem;}
+        .nav-links a:hover{color:var(--text-primary);}
+        .nav-links .active{color:var(--accent);font-weight:600;}
+        .theme-toggle{background:none;border:none;cursor:pointer;padding:0.5rem;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;}
+        .theme-toggle svg{width:20px;height:20px;fill:var(--text-secondary);transition:fill 0.3s;}
+        .theme-toggle:hover svg{fill:var(--text-primary);}
+
+        .hamburger{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;}
+        .hamburger svg{width:24px;height:24px;fill:var(--text-secondary);transition:fill 0.3s;}
+        .hamburger:hover svg{fill:var(--text-primary);}
+        @media(max-width:768px){
+            .hamburger{display:block;}
+            #navLinks{position:absolute;top:100%;right:2rem;background:var(--bg-primary);flex-direction:column;align-items:flex-start;width:220px;padding:1rem;border:1px solid var(--border);border-radius:var(--radius);transform:scale(0);transform-origin:top right;transition:transform 0.3s ease;}
+            #navLinks.open{transform:scale(1);}#navLinks a{padding:0.5rem 0;}
+        }
+
+        /* Hero */
+        .page-hero{text-align:center;padding:5rem 2rem 3rem;max-width:var(--max-width);margin:0 auto; flex-grow: 1;}
+        .page-hero h1{font-size:3rem;font-weight:700;margin-bottom:1rem;color:var(--text-primary);}
+        .page-hero p{font-size:1.25rem;color:var(--text-secondary);max-width:700px;margin:0 auto 2rem;}
+
+        /* Newsletter Form (copied from index.html hero, with minor adjustments) */
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px; /* Adjusted */
+            margin: 2rem auto; /* Centered with margin */
+            transition: transform 0.3s ease;
+        }
+        .newsletter-form:focus-within {
+             transform: translateY(-2px);
+        }
+        .newsletter-form input[type="email"] { /* More specific selector */
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .newsletter-form input[type="email"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+        .btn-primary { /* Shared style from other pages */
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+         .btn-primary:disabled {
+            background-color: var(--text-tertiary);
+            cursor: not-allowed;
+        }
+        #newsletterResponse { /* For feedback message */
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 1.2em; /* Reserve space for message */
+        }
+
+        footer {
+            text-align:center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            font-size:0.875rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        @media(max-width:768px){.page-hero h1{font-size:2.25rem;}.page-hero p{font-size:1.125rem;}}
+         @media (max-width: 480px) {
+            .newsletter-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="index.html" class="logo">ModernBlog</a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Articles</a>
+            <a href="archive.html">Archive</a>
+            <a href="topics.html">Topics</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html" id="navLogin">Login</a>
+            <a href="register.html" id="navRegister">Register</a>
+            <a href="profile.html" id="navProfile" style="display:none;">Profile</a>
+            <a href="bookmarks.html" id="navBookmarks" style="display:none;">Bookmarks</a>
+            <a href="#" id="navLogout" style="display:none;">Logout</a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon"><path d="M6.76 4.84l-1.8-1.79-1.42 1.41 1.79 1.8 1.43-1.42zM1 11h3v2H1v-2zm10-9h2v3h-2V2zm9.66 3.46l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM17.24 19.16l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM20 11h3v2h-3v-2zm-9 9h2v3h-2v-3zM3.34 18.54l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8z"/><circle cx="12" cy="13" r="5"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="moonIcon" style="display:none;"><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></svg>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<main class="page-hero">
+    <h1>Subscribe to Our Newsletter</h1>
+    <p>Stay updated with our latest articles, news, and insights by subscribing to our weekly newsletter.</p>
+    <form class="newsletter-form" id="pageNewsletterForm">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email" required>
+        <button type="submit" class="btn-primary">Subscribe</button>
+    </form>
+    <p id="newsletterResponse"></p>
+</main>
+
+<footer>
+    &copy; <span id="year">2024</span> ModernBlog. All rights reserved. | <a href="newsletter.html" class="footer-link">Newsletter</a> | <a href="/rss.xml" class="footer-link">RSS Feed</a>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Theme toggle logic (from other pages)
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const html = document.documentElement;
+        const updateIcon = t => { sunIcon.style.display = t === 'dark' ? 'none' : 'block'; moonIcon.style.display = t === 'dark' ? 'block' : 'none'; };
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+        themeToggle.addEventListener('click', () => { const current = html.getAttribute('data-theme'); const next = current === 'light' ? 'dark' : 'light'; html.setAttribute('data-theme', next); localStorage.setItem('theme', next); updateIcon(next); });
+
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Newsletter form logic
+        const newsletterForm = document.getElementById('pageNewsletterForm');
+        const newsletterResponse = document.getElementById('newsletterResponse');
+        if (newsletterForm && newsletterResponse) { // Added null check for newsletterResponse
+            newsletterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const emailInput = document.getElementById('newsletterEmail');
+                const button = newsletterForm.querySelector('button[type="submit"]');
+
+                if (emailInput.value.trim() === '' || !emailInput.checkValidity()) {
+                     newsletterResponse.textContent = 'Please enter a valid email address.';
+                     newsletterResponse.style.color = 'var(--accent-hover)'; // Or a red color
+                     return;
+                }
+
+                newsletterResponse.textContent = 'Thank you for subscribing!';
+                newsletterResponse.style.color = 'var(--accent)';
+                button.textContent = 'Subscribed!';
+                button.disabled = true;
+                if(emailInput) emailInput.value = ''; // Clear the input
+
+                setTimeout(() => {
+                    button.textContent = 'Subscribe';
+                    button.disabled = false;
+                    newsletterResponse.textContent = '';
+                }, 4000);
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -84,7 +84,23 @@
         .contact-links a:hover{background:var(--bg-tertiary);transform:translateY(-2px);}        
         .contact-links svg{width:18px;height:18px;fill:currentColor;}
 
-        footer{text-align:center;padding:2rem;color:var(--text-secondary);font-size:0.875rem;}
+        footer { /* Ensure footer has some padding if not already */
+            text-align:center;
+            padding: 2rem 1rem; /* Adjusted padding */
+            color: var(--text-secondary);
+            font-size:0.875rem;
+            border-top: 1px solid var(--border); /* Add a top border */
+            margin-top: auto; /* Helps push to bottom if content is short */
+        }
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
         @media(max-width:768px){.contact-hero h1{font-size:2.25rem;}.contact-hero p{font-size:1.125rem;}}
     </style>
 </head>
@@ -99,6 +115,11 @@
             <a href="topics.html">Topics</a>
             <a href="about.html">About</a>
             <a href="contact.html" class="active">Contact</a>
+            <a href="login.html" id="navLogin">Login</a>
+            <a href="register.html" id="navRegister">Register</a>
+            <a href="profile.html" id="navProfile" style="display:none;">Profile</a>
+                <a href="bookmarks.html" id="navBookmarks" style="display:none;">Bookmarks</a>
+                <a href="#" id="navLogout" style="display:none;">Logout</a>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                 <!-- Sun & moon icons -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon"><path d="M6.76 4.84l-1.8-1.79-1.42 1.41 1.79 1.8 1.43-1.42zM1 11h3v2H1v-2zm10-9h2v3h-2V2zm9.66 3.46l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM17.24 19.16l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM20 11h3v2h-3v-2zm-9 9h2v3h-2v-3zM3.34 18.54l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8z"/><circle cx="12" cy="13" r="5"/></svg>
@@ -133,7 +154,9 @@
     </section>
 </main>
 
-<footer>&copy; <span id="year"></span> ModernBlog. All rights reserved.</footer>
+<footer>
+    &copy; <span id="year"></span> ModernBlog. All rights reserved. | <a href="newsletter.html" class="footer-link">Newsletter</a> | <a href="/rss.xml" class="footer-link">RSS Feed</a>
+</footer>
 
 <script>
     document.addEventListener('DOMContentLoaded',()=>{

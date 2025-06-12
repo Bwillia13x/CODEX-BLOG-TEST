@@ -660,6 +660,39 @@
         .comment-item { background-color: var(--bg-secondary); padding: 1rem; border-radius: var(--radius); }
         .comment-author { font-weight: 600; margin-bottom: 0.25rem; }
         .comment-date { font-size: 0.875rem; color: var(--text-tertiary); margin-bottom: 0.5rem; }
+        .comment-item { /* Existing, ensure it's there */
+            background-color: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius);
+            /* Add margin if not present */
+            margin-bottom: 1rem;
+        }
+        .comment-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+        .reply-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .reply-btn:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+        .comment-replies {
+            margin-left: 2rem; /* Indent replies */
+            margin-top: 1rem;
+            border-left: 2px solid var(--border);
+            padding-left: 1rem;
+        }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
@@ -682,6 +715,125 @@
              .article-subtitle { font-size: 1.15rem; }
              .featured-grid { grid-template-columns: 1fr; }
         }
+        .bookmark-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.35rem 0.7rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+        .bookmark-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .bookmark-btn.bookmarked {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .bookmark-btn .icon {
+            /* Basic placeholder for an icon, you can use SVG later if needed */
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            line-height: 1em;
+        }
+        /* Simple text 'icon' for now, can be replaced with SVG */
+        .bookmark-btn .icon::before {
+            content: '☆'; /* Default: empty star */
+        }
+        .bookmark-btn.bookmarked .icon::before {
+            content: '★'; /* Bookmarked: filled star */
+        }
+        .reactions-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .reaction-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.5rem 0.8rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: transform 0.2s, box-shadow 0.2s, color 0.2s, background-color 0.2s;
+        }
+        .reaction-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+            color: var(--accent);
+        }
+        .reaction-btn.reacted {
+            background-color: color-mix(in srgb, var(--accent) 20%, var(--bg-secondary)); /* Light accent mix */
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 500;
+        }
+        [data-theme="dark"] .reaction-btn.reacted {
+             background-color: color-mix(in srgb, var(--accent) 30%, var(--bg-secondary));
+        }
+        .reaction-btn .count {
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .post-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+        .pagination-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            max-width: 48%; /* Ensure they don't overlap if text is long */
+        }
+        .pagination-link:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .pagination-link .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        .pagination-link .title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: -webkit-box; /* For multiline ellipsis */
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pagination-link.prev {
+            text-align: left;
+        }
+        .pagination-link.next {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -699,11 +851,16 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
             </button>
             <div class="nav-links" id="navLinks">
-                <a href="index.html">Articles</a>
+                <a href="index.html" class="active">Articles</a>
                 <a href="archive.html">Archive</a>
                 <a href="topics.html">Topics</a>
                 <a href="about.html">About</a>
                 <a href="contact.html">Contact</a>
+                <a href="login.html" id="navLogin">Login</a>
+                <a href="register.html" id="navRegister">Register</a>
+                <a href="profile.html" id="navProfile" style="display:none;">Profile</a>
+                <a href="bookmarks.html" id="navBookmarks" style="display:none;">Bookmarks</a>
+                <a href="#" id="navLogout" style="display:none;">Logout</a>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon">
                         <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
@@ -738,6 +895,7 @@
                         <div class="post-meta"><span class="post-category">Design</span><span>•</span><span>5 min read</span></div>
                         <h3 class="post-title">Building Beautiful and Functional Blog Interfaces</h3>
                         <p class="post-excerpt">Discover the principles behind creating blog interfaces that readers love, combining aesthetics with usability.</p>
+                        <button class="bookmark-btn" aria-label="Bookmark this post"><span class="icon"></span> Bookmark</button>
                         <a href="#" class="read-more" onclick="event.stopPropagation(); showArticle();">Read more →</a>
                     </div>
                 </article>
@@ -748,6 +906,7 @@
                         <div class="post-meta"><span class="post-category">Technology</span><span>•</span><span>8 min read</span></div>
                         <h3 class="post-title">The Future of Web Development: Trends to Watch</h3>
                         <p class="post-excerpt">An in-depth look at emerging technologies and methodologies shaping the future of web development.</p>
+                        <button class="bookmark-btn" aria-label="Bookmark this post"><span class="icon"></span> Bookmark</button>
                         <a href="#" class="read-more">Read more →</a>
                     </div>
                 </article>
@@ -758,6 +917,7 @@
                         <div class="post-meta"><span class="post-category">Tutorial</span><span>•</span><span>12 min read</span></div>
                         <h3 class="post-title">A Complete Guide to Modern CSS Layouts</h3>
                         <p class="post-excerpt">Master CSS Grid and Flexbox with practical examples and best practices for responsive design.</p>
+                        <button class="bookmark-btn" aria-label="Bookmark this post"><span class="icon"></span> Bookmark</button>
                         <a href="#" class="read-more">Read more →</a>
                     </div>
                 </article>
@@ -787,6 +947,7 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         <span>5 min read</span>
                     </div>
+                    <button class="bookmark-btn" aria-label="Bookmark this article" style="margin-top: 1rem;"><span class="icon"></span> Bookmark Article</button>
                 </div>
                 <h1 class="article-title">Building Beautiful and Functional Blog Interfaces</h1>
                 <p class="article-subtitle">Discover the principles behind creating blog interfaces that readers love, combining aesthetics with usability.</p>
@@ -836,6 +997,18 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                 <p>Building a beautiful and functional blog interface is an iterative process. Start with solid foundations, gather feedback from your readers, and continuously refine your design. Remember, the best blog design is one that gets out of the way and lets your content shine.</p>
             </div>
 
+            <div class="reactions-bar" id="reactionsBar">
+                <button class="reaction-btn" data-reaction="like">
+                    <span>👍</span> Like <span class="count">0</span>
+                </button>
+                <button class="reaction-btn" data-reaction="clap">
+                    <span>👏</span> Clap <span class="count">0</span>
+                </button>
+                <button class="reaction-btn" data-reaction="heart">
+                    <span>❤️</span> Heart <span class="count">0</span>
+                </button>
+            </div>
+
             <div class="share-section">
                 <h3 class="share-title">Share this article</h3>
                 <div class="share-buttons">
@@ -862,6 +1035,38 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                 </form>
                 <ul id="commentList" class="comment-list"></ul>
             </div>
+
+            <section class="related-posts-section">
+                <h3 class="related-posts-title">Related Posts</h3>
+                <div class="related-posts-grid">
+                    <!-- Placeholder Post 1 -->
+                    <div class="related-post-card">
+                        <h4><a href="#">Another Interesting Article Title</a></h4>
+                        <p>A brief teaser or excerpt of what this related article might be about, keeping it short and engaging.</p>
+                    </div>
+                    <!-- Placeholder Post 2 -->
+                    <div class="related-post-card">
+                        <h4><a href="#">Exploring a Similar Topic</a></h4>
+                        <p>This post delves into concepts that complement the current article, offering further insights.</p>
+                    </div>
+                    <!-- Placeholder Post 3 (optional) -->
+                    <div class="related-post-card">
+                        <h4><a href="#">A Different Perspective on This Subject</a></h4>
+                        <p>Discover an alternative viewpoint or a case study related to the themes discussed above.</p>
+                    </div>
+                </div>
+            </section>
+
+            <nav class="post-pagination" aria-label="Article navigation">
+                <a href="#" class="pagination-link prev">
+                    <span class="label">Previous Article</span>
+                    <span class="title">A Look Back: Older Post Title Placeholder</span>
+                </a>
+                <a href="#" class="pagination-link next">
+                    <span class="label">Next Article</span>
+                    <span class="title">Coming Up: Newer Post Title Placeholder That Might Be Quite Long</span>
+                </a>
+            </nav>
         </div>
     </article>
 
@@ -964,9 +1169,33 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             setupTocObserver();
             addCodeBlockHeaders();
             setupShareButtons();
+            setupReactions(); // Added
             window.addEventListener('scroll', handleArticleScroll);
             
             isArticleInitialized = true;
+        }
+
+        function setupReactions() {
+            const reactionsBar = document.getElementById('reactionsBar');
+            if (!reactionsBar) return;
+
+            reactionsBar.addEventListener('click', function(event) {
+                const button = event.target.closest('.reaction-btn');
+                if (!button) return;
+
+                button.classList.toggle('reacted');
+                const countSpan = button.querySelector('.count');
+                if (!countSpan) return;
+
+                let currentCount = parseInt(countSpan.textContent, 10);
+
+                if (button.classList.contains('reacted')) {
+                    currentCount++;
+                } else {
+                    currentCount = Math.max(0, currentCount - 1); // Ensure count doesn't go below 0
+                }
+                countSpan.textContent = currentCount;
+            });
         }
         
         function handleArticleScroll() {
@@ -1118,13 +1347,25 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             const comments = JSON.parse(localStorage.getItem('comments') || '[]');
 
             function renderComments() {
+                if (!commentList) return; // Ensure commentList exists
                 commentList.innerHTML = '';
                 comments.forEach(c => {
                     const li = document.createElement('li');
                     li.className = 'comment-item';
-                    li.innerHTML = `<div class="comment-author">${c.name}</div>` +
-                                   `<div class="comment-date">${c.date}</div>` +
-                                   `<div class="comment-text">${c.text}</div>`;
+                    const commentId = c.id || Date.now() + Math.random(); // Ensure an ID for reply functionality
+                    li.dataset.commentId = commentId; // Store id on the element for easy access
+
+                    let commentHTML = `
+                        <div class="comment-author">${c.name}</div>
+                        <div class="comment-date">${c.date}</div>
+                        <div class="comment-text">${c.text}</div>
+                        <div class="comment-actions">
+                            <button class="reply-btn" data-comment-id="${commentId}">Reply</button>
+                        </div>
+                        <div class="comment-replies" id="replies-to-${commentId}">
+                            <!-- Replies would be injected here by a more advanced system -->
+                        </div>`;
+                    li.innerHTML = commentHTML;
                     commentList.appendChild(li);
                 });
             }
@@ -1136,22 +1377,83 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                     e.preventDefault();
                     const name = document.getElementById('commentName').value.trim();
                     const text = document.getElementById('commentText').value.trim();
+                    const parentId = document.getElementById('parentCommentId').value;
+
                     if (!name || !text) return;
-                    const newComment = { name, text, date: new Date().toLocaleString() };
+                    const newComment = {
+                        id: Date.now(), // Assign a new ID
+                        name,
+                        text,
+                        date: new Date().toLocaleString()
+                    };
+                    if (parentId) {
+                        newComment.parentId = parentId;
+                    }
                     comments.push(newComment);
                     localStorage.setItem('comments', JSON.stringify(comments));
+
                     e.target.reset();
-                    renderComments();
+                    document.getElementById('parentCommentId').value = ''; // Clear parent ID
+                    // Optional: clear replyingToInfo.textContent = '';
+                    renderComments(); // Re-render all comments (simple approach for now)
                 });
             }
+
+            // Delegated event listener for reply buttons
+            if (commentList) {
+                commentList.addEventListener('click', function(event) {
+                    const replyButton = event.target.closest('.reply-btn');
+                    if (replyButton) {
+                        event.preventDefault();
+                        const commentId = replyButton.dataset.commentId;
+                        document.getElementById('parentCommentId').value = commentId;
+
+                        // Optional: Update replyingToInfo
+                        // const commentItem = replyButton.closest('.comment-item');
+                        // const authorName = commentItem.querySelector('.comment-author').textContent;
+                        // document.getElementById('replyingToInfo').textContent = `Replying to ${authorName}...`;
+                        // document.getElementById('replyingToInfo').style.display = 'block';
+
+                        document.getElementById('commentText').focus();
+                    }
+                });
+            }
+
+            // Bookmark button toggle functionality
+            const bookmarkButtons = document.querySelectorAll('.bookmark-btn');
+            bookmarkButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Prevent card click if button is on a card
+                    this.classList.toggle('bookmarked');
+                    const buttonTextSpan = this.childNodes[1] ? this.childNodes[1] : (this.childNodes[0].nextSibling ? this.childNodes[0].nextSibling : null) ; // Try to get the text node/span correctly
+
+                    if (this.classList.contains('bookmarked')) {
+                        if (buttonTextSpan && buttonTextSpan.nodeType === Node.TEXT_NODE) buttonTextSpan.nodeValue = ' Bookmarked';
+                        else if (buttonTextSpan) buttonTextSpan.textContent = ' Bookmarked'; // Fallback for span
+                        else this.innerHTML = '<span class="icon"></span> Bookmarked'; // Full rewrite if structure is unexpected
+                    } else {
+                        if (buttonTextSpan && buttonTextSpan.nodeType === Node.TEXT_NODE) buttonTextSpan.nodeValue = ' Bookmark';
+                        else if (buttonTextSpan) buttonTextSpan.textContent = ' Bookmark';
+                        else this.innerHTML = '<span class="icon"></span> Bookmark';
+                         // Check if it's the main article button and adjust text
+                        if (this.getAttribute('aria-label') === 'Bookmark this article') {
+                           if (buttonTextSpan && buttonTextSpan.nodeType === Node.TEXT_NODE) buttonTextSpan.nodeValue = ' Bookmark Article';
+                           else if (buttonTextSpan) buttonTextSpan.textContent = ' Bookmark Article';
+                           else this.innerHTML = '<span class="icon"></span> Bookmark Article';
+                        }
+                    }
+                });
+            });
         });
         const backToTop = document.getElementById("backToTop");
-        window.addEventListener("scroll", () => {
-            backToTop.classList.toggle("show", window.scrollY > 300);
-        });
-        backToTop.addEventListener("click", () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
+        if (backToTop) {
+            window.addEventListener("scroll", () => {
+                backToTop.classList.toggle("show", window.scrollY > 300);
+            });
+            backToTop.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
 
     </script>
     <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>

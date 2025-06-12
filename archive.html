@@ -79,10 +79,63 @@
         .archive-item:hover{box-shadow:0 10px 20px var(--shadow-hover);transform:translateY(-3px);}        
         .archive-date{font-size:0.875rem;color:var(--text-tertiary);}        
         .archive-title{font-size:1.25rem;font-weight:700;color:var(--text-primary);}        
-        .archive-excerpt{font-size:1rem;color:var(--text-secondary);}        
+        .archive-excerpt{font-size:1rem;color:var(--text-secondary); margin-bottom: 0.75rem;}
 
         footer{text-align:center;padding:2rem;color:var(--text-secondary);font-size:0.875rem;}
         @media(max-width:768px){.archive-hero h1{font-size:2.25rem;}.archive-hero p{font-size:1.125rem;}}
+
+        .bookmark-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.35rem 0.7rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+            align-self: flex-start; /* Align with other elements in flex column */
+        }
+        .bookmark-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .bookmark-btn.bookmarked {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .bookmark-btn .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            line-height: 1em;
+        }
+        .bookmark-btn .icon::before {
+            content: '☆'; /* Default: empty star */
+        }
+        .bookmark-btn.bookmarked .icon::before {
+            content: '★'; /* Bookmarked: filled star */
+        }
+        footer { /* Ensure footer has some padding if not already */
+            text-align:center;
+            padding: 2rem 1rem; /* Adjusted padding */
+            color: var(--text-secondary);
+            font-size:0.875rem;
+            border-top: 1px solid var(--border); /* Add a top border */
+            margin-top: auto; /* Helps push to bottom if content is short */
+        }
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -96,6 +149,11 @@
             <a href="archive.html" class="active">Archive</a>
             <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
+            <a href="login.html" id="navLogin">Login</a>
+            <a href="register.html" id="navRegister">Register</a>
+            <a href="profile.html" id="navProfile" style="display:none;">Profile</a>
+                <a href="bookmarks.html" id="navBookmarks" style="display:none;">Bookmarks</a>
+                <a href="#" id="navLogout" style="display:none;">Logout</a>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon"><path d="M6.76 4.84l-1.8-1.79-1.42 1.41 1.79 1.8 1.43-1.42zM1 11h3v2H1v-2zm10-9h2v3h-2V2zm9.66 3.46l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM17.24 19.16l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM20 11h3v2h-3v-2zm-9 9h2v3h-2v-3zM3.34 18.54l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8z"/><circle cx="12" cy="13" r="5"/></svg>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="moonIcon" style="display:none;"><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></svg>
@@ -126,7 +184,9 @@
     </section>
 </main>
 
-<footer>&copy; <span id="year"></span> ModernBlog. All rights reserved.</footer>
+<footer>
+    &copy; <span id="year"></span> ModernBlog. All rights reserved. | <a href="newsletter.html" class="footer-link">Newsletter</a> | <a href="/rss.xml" class="footer-link">RSS Feed</a>
+</footer>
 
 <script>
     document.addEventListener('DOMContentLoaded',()=>{
@@ -156,7 +216,7 @@
             const li=document.createElement('li');
             li.className='archive-item';
             li.dataset.year=new Date(p.date).getFullYear();
-            li.innerHTML=`<span class="archive-date">${new Date(p.date).toLocaleDateString()}</span><a href="${p.url}" class="archive-title">${p.title}</a><p class="archive-excerpt">${p.excerpt}</p>`;
+            li.innerHTML=`<span class="archive-date">${new Date(p.date).toLocaleDateString()}</span><a href="${p.url}" class="archive-title">${p.title}</a><p class="archive-excerpt">${p.excerpt}</p><button class="bookmark-btn" aria-label="Bookmark this post"><span class="icon"></span> Bookmark</button>`;
             listEl.appendChild(li);
         });
 
@@ -170,6 +230,29 @@
                 item.style.display=y==='all'||item.dataset.year===y?'flex':'none';
             });
         });
+
+        // Delegated event listener for bookmark buttons on dynamically added archive items
+        const archiveList = document.getElementById('archiveList');
+        if (archiveList) {
+            archiveList.addEventListener('click', function(event) {
+                const button = event.target.closest('.bookmark-btn');
+                if (button) {
+                    event.stopPropagation(); // Prevent any parent link navigation
+                    button.classList.toggle('bookmarked');
+                    const buttonTextSpan = button.childNodes[1] ? button.childNodes[1] : (button.childNodes[0].nextSibling ? button.childNodes[0].nextSibling : null);
+
+                    if (button.classList.contains('bookmarked')) {
+                        if (buttonTextSpan && buttonTextSpan.nodeType === Node.TEXT_NODE) buttonTextSpan.nodeValue = ' Bookmarked';
+                        else if (buttonTextSpan) buttonTextSpan.textContent = ' Bookmarked';
+                        else button.innerHTML = '<span class="icon"></span> Bookmarked';
+                    } else {
+                        if (buttonTextSpan && buttonTextSpan.nodeType === Node.TEXT_NODE) buttonTextSpan.nodeValue = ' Bookmark';
+                        else if (buttonTextSpan) buttonTextSpan.textContent = ' Bookmark';
+                        else button.innerHTML = '<span class="icon"></span> Bookmark';
+                    }
+                }
+            });
+        }
     });
 </script>
 </body>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn more about the mission and team behind ModernBlog.">
-    <title>About • ModernBlog</title>
+    <meta name="description" content="Your bookmarked articles on ModernBlog.">
+    <title>My Bookmarks • ModernBlog</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         header {
             background-color: var(--bg-primary-translucent, rgba(255,255,255,0.8));
             border-bottom: 1px solid var(--border);
@@ -61,7 +61,7 @@
         .hamburger{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;}
         .hamburger svg{width:24px;height:24px;fill:var(--text-secondary);transition:fill 0.3s;}
         .hamburger:hover svg{fill:var(--text-primary);}
-        
+
         @media(max-width:768px){
             .hamburger{display:block;}
             #navLinks{position:absolute;top:100%;right:2rem;background:var(--bg-primary);flex-direction:column;align-items:flex-start;width:220px;padding:1rem;border:1px solid var(--border);border-radius:var(--radius);transform:scale(0);transform-origin:top right;transition:transform 0.3s ease;}
@@ -69,20 +69,34 @@
             #navLinks a{padding:0.5rem 0;}
         }
 
-        /* About Hero */
-        .about-hero { text-align: center; padding: 5rem 2rem 3rem; max-width: var(--max-width); margin: 0 auto; }
-        .about-hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .about-hero p { font-size: 1.25rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+        /* Page Hero Section */
+        .page-hero {
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .page-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
 
-        /* Mission Section */
-        .mission-section { background: var(--bg-secondary); padding: 4rem 2rem; }
-        .mission-inner { max-width: var(--max-width); margin: 0 auto; text-align: center; }
-        .mission-inner h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .mission-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; }
-        .mission-card { background: var(--bg-primary); border:1px solid var(--border); border-radius: var(--radius); padding: 2rem; transition: transform 0.3s, box-shadow 0.3s; }
-        .mission-card:hover { transform: translateY(-5px); box-shadow:0 10px 20px var(--shadow-hover); }
-        .mission-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
-        .mission-card p { color: var(--text-secondary); }
+        /* Bookmarks Container */
+        .bookmarks-container {
+            max-width: 800px; /* Wider for potential article cards */
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center; /* Center the placeholder message */
+        }
+        .bookmarks-container p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
 
         /* Footer */
         footer { /* Ensure footer has some padding if not already */
@@ -103,7 +117,9 @@
             text-decoration: underline;
         }
 
-        @media(max-width:768px){ .about-hero h1{font-size:2.25rem;} .about-hero p{font-size:1.125rem;} }
+        @media(max-width:768px){
+            .page-hero h1{font-size:2rem;}
+        }
     </style>
 </head>
 <body>
@@ -115,13 +131,13 @@
             <a href="index.html">Articles</a>
             <a href="archive.html">Archive</a>
             <a href="topics.html">Topics</a>
-            <a href="about.html" class="active">About</a>
+            <a href="about.html">About</a>
             <a href="contact.html">Contact</a>
             <a href="login.html" id="navLogin">Login</a>
             <a href="register.html" id="navRegister">Register</a>
             <a href="profile.html" id="navProfile" style="display:none;">Profile</a>
-                <a href="bookmarks.html" id="navBookmarks" style="display:none;">Bookmarks</a>
-                <a href="#" id="navLogout" style="display:none;">Logout</a>
+            <a href="bookmarks.html" id="navBookmarks" style="display:none;" class="active">Bookmarks</a>
+            <a href="#" id="navLogout" style="display:none;">Logout</a>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon">
                     <path d="M6.76 4.84l-1.8-1.79-1.42 1.41 1.79 1.8 1.43-1.42zM1 11h3v2H1v-2zm10-9h2v3h-2V2zm9.66 3.46l-1.41-1.41-1.8 1.79 1.42 1.42 1.79-1.8zM17.24 19.16l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM20 11h3v2h-3v-2zm-9 9h2v3h-2v-3zM3.34 18.54l1.41 1.41 1.8-1.79-1.42-1.42-1.79 1.8z"/>
@@ -136,29 +152,12 @@
 </header>
 
 <main>
-    <section class="about-hero">
-        <h1>About ModernBlog</h1>
-        <p>We believe in crafting insightful, beautifully designed content that empowers developers and designers worldwide.</p>
+    <section class="page-hero">
+        <h1>Your Bookmarked Articles</h1>
     </section>
-
-    <section class="mission-section">
-        <div class="mission-inner">
-            <h2>Our Mission</h2>
-            <div class="mission-cards">
-                <div class="mission-card">
-                    <h3>Educate</h3>
-                    <p>Provide clear, actionable tutorials and articles that educate and inspire.</p>
-                </div>
-                <div class="mission-card">
-                    <h3>Innovate</h3>
-                    <p>Push the boundaries of web design and development, sharing modern techniques and trends.</p>
-                </div>
-                <div class="mission-card">
-                    <h3>Connect</h3>
-                    <p>Foster a vibrant community where creators collaborate, learn, and grow together.</p>
-                </div>
-            </div>
-        </div>
+    <section class="bookmarks-container">
+        <p id="bookmarksMessage">Your saved articles will appear here. Currently, this is a placeholder.</p>
+        <!-- Future: Placeholder article cards could go here -->
     </section>
 </main>
 
@@ -167,7 +166,7 @@
 </footer>
 
 <script>
-    // --- Theme Toggle ---
+    // Theme Toggle and Year (copied from profile.html)
     document.addEventListener('DOMContentLoaded', () => {
         const themeToggle = document.getElementById('themeToggle');
         const sunIcon = document.getElementById('sunIcon');
@@ -196,8 +195,10 @@
             updateThemeIcon(newTheme);
         });
 
-        // Set current year in footer
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // No specific JS needed for bookmarks page content yet,
+        // nav.js handles user navigation updates.
     });
 </script>
 </body>
