@@ -135,14 +135,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded',()=>{
-        const themeToggle=document.getElementById('themeToggle');
-        const sunIcon=document.getElementById('sunIcon');
-        const moonIcon=document.getElementById('moonIcon');
-        const html=document.documentElement;
-        const updateIcon=t=>{sunIcon.style.display=t==='dark'?'none':'block';moonIcon.style.display=t==='dark'?'block':'none';};
-        const saved=localStorage.getItem('theme')||'light';html.setAttribute('data-theme',saved);updateIcon(saved);
-        themeToggle.addEventListener('click',()=>{const current=html.getAttribute('data-theme');const next=current==='light'?'dark':'light';html.setAttribute('data-theme',next);localStorage.setItem('theme',next);updateIcon(next);});
-        document.getElementById('year').textContent=new Date().getFullYear();
 
         // Sample dataset – replace with real data source
         const posts=[
