@@ -13,13 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.nav-links a').forEach(link => {
         const linkHref = link.getAttribute('href');
-        // Clear active class from all main page links first.
-        // User-specific links (login, register, profile, bookmarks) will have their active states
-        // managed by updateUserNav.
         if (mainPageLinks.includes(linkHref)) {
             link.classList.remove('active');
         }
-        // Add active class if it's a main page and matches current path
         if (mainPageLinks.includes(path) && linkHref === path) {
             link.classList.add('active');
         }
@@ -29,13 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const navLogin = document.getElementById('navLogin');
         const navRegister = document.getElementById('navRegister');
         const navProfile = document.getElementById('navProfile');
-        const navBookmarks = document.getElementById('navBookmarks'); // Added
+        const navBookmarks = document.getElementById('navBookmarks');
         const navLogout = document.getElementById('navLogout');
 
         const loggedInUser = localStorage.getItem('loggedInUser');
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
 
-        // Reset active states for user-related links before applying new ones
         if(navLogin) navLogin.classList.remove('active');
         if(navRegister) navRegister.classList.remove('active');
         if(navProfile) navProfile.classList.remove('active');
@@ -49,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 navProfile.style.display = 'inline';
                 if (currentPath === 'profile.html') navProfile.classList.add('active');
             }
-            if (navBookmarks) { // Added
+            if (navBookmarks) {
                 navBookmarks.style.display = 'inline';
                 if (currentPath === 'bookmarks.html') navBookmarks.classList.add('active');
             }
@@ -64,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentPath === 'register.html') navRegister.classList.add('active');
             }
             if (navProfile) navProfile.style.display = 'none';
-            if (navBookmarks) navBookmarks.style.display = 'none'; // Added
+            if (navBookmarks) navBookmarks.style.display = 'none';
             if (navLogout) navLogout.style.display = 'none';
         }
     }
@@ -80,4 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateUserNav();
+
+    // Handle navigation search input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault();
+                const query = searchInput.value.trim();
+                if (query) {
+                    window.location.href = 'search.html?q=' + encodeURIComponent(query);
+                }
+            }
+        });
+    }
 });
