@@ -10,42 +10,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.xml">
     <script defer src="nav.js"></script>
     <script defer src="advanced.js"></script>
-    <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f9fafb;
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --accent: #3b82f6;
-            --border: #e5e7eb;
-            --radius: 0.75rem;
-        }
-        [data-theme="dark"] {
-            --bg-primary: #121212;
-            --bg-secondary: #1a1a1a;
-            --text-primary: #f9fafb;
-            --text-secondary: #d1d5db;
-            --accent: #60a5fa;
-            --border: #374151;
-        }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); margin:0; }
-        header { background: var(--bg-primary); border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:100; }
-        nav { max-width: 1200px; margin:0 auto; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; }
-        .logo { font-size:1.5rem; font-weight:700; color:var(--text-primary); text-decoration:none; }
-        .nav-links { display:flex; gap:1.5rem; align-items:center; }
-        .nav-links a { color:var(--text-secondary); text-decoration:none; font-weight:500; padding:0.5rem; }
-        .nav-links a:hover { color:var(--text-primary); }
-        .theme-toggle { background:none; border:none; cursor:pointer; padding:0.5rem; border-radius:var(--radius); }
-        .theme-toggle svg { width:20px; height:20px; fill:var(--text-secondary); transition:fill 0.3s; }
-        .theme-toggle:hover svg { fill:var(--text-primary); }
-        .auth-container { max-width:400px; margin:4rem auto; padding:2rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-secondary); }
-        .auth-container h1 { text-align:center; margin-bottom:1.5rem; }
-        .auth-container label { display:block; margin-bottom:0.25rem; }
-        .auth-container input { width:100%; padding:0.5rem; margin-bottom:1rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-primary); color:var(--text-primary); }
-        .auth-container button { width:100%; padding:0.75rem; background:var(--accent); color:#fff; border:none; border-radius:var(--radius); font-weight:600; cursor:pointer; transition:background 0.3s; }
-        .auth-container button:hover { background:#2563eb; }
-        .toggle-link { display:block; text-align:center; margin-top:1rem; color:var(--accent); cursor:pointer; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
