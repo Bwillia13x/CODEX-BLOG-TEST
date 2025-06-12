@@ -6,6 +6,17 @@
     <meta name="description" content="Insights on technology, design and web development.">
     <meta name="keywords" content="blog, technology, design, tutorials">
     <title>Modern Blog</title>
+    <link rel="canonical" href="https://example.com/">
+    <meta name="author" content="Jane Doe">
+    <meta property="og:title" content="Modern Blog">
+    <meta property="og:description" content="Insights on technology, design and web development.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com/">
+    <meta property="og:image" content="https://placehold.co/1200x630.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Modern Blog">
+    <meta name="twitter:description" content="Insights on technology, design and web development.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
@@ -51,6 +62,16 @@
 
         html {
             scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
 
         body {
@@ -150,6 +171,47 @@
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+        .skip-link {
+            position: absolute;
+            left: -999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            left: 1rem;
+            top: 1rem;
+            width: auto;
+            height: auto;
+            background-color: var(--accent);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            z-index: 200;
+        }
+        .back-to-top {
+            position: fixed;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px var(--shadow);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .back-to-top:hover {
+            background-color: var(--accent-hover);
+        }
+        .back-to-top.show {
+            display: flex;
         }
 
         /* Hero Section */
@@ -611,6 +673,7 @@
     </style>
 </head>
 <body>
+    <a href="#mainContent" class="skip-link">Skip to content</a>
     <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
@@ -638,7 +701,7 @@
     </header>
 
     <!-- Main Content (Homepage) -->
-    <main id="homepage">
+    <main id="mainContent">
         <section class="hero">
             <h1>Thoughts & Ideas</h1>
             <p>Exploring technology, design, and the art of building digital experiences that matter.</p>
@@ -735,8 +798,8 @@
 
                 <pre><code class="language-js">// Example: Lazy loading implementation
 const images = document.querySelectorAll('img[data-src]');
-const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+const imageObserver = new IntersectionObserver((entries) =&gt; {
+    entries.forEach(entry =&gt; {
         if (entry.isIntersecting) {
             const img = entry.target;
             img.src = img.dataset.src;
@@ -744,7 +807,7 @@ const imageObserver = new IntersectionObserver((entries) => {
         }
     });
 });
-images.forEach(img => imageObserver.observe(img));</code></pre>
+images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
 
                 <h2 id="engagement">Enhancing Reader Engagement</h2>
                 <p>Interactive elements can significantly boost reader engagement. Consider adding features like: progress indicators, estimated reading times, a table of contents, social sharing buttons, and comment sections to foster community discussion.</p>
@@ -793,7 +856,7 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
             const moonIcon = document.getElementById('moonIcon');
             const html = document.documentElement;
 
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
             html.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
 
@@ -857,19 +920,19 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
         });
 
         // --- Page Navigation ---
-        const homepage = document.getElementById('homepage');
+        const mainContent = document.getElementById('mainContent');
         const articlePage = document.getElementById('articlePage');
 
         function showHomepage(event) {
              if (event) event.preventDefault();
-             homepage.style.display = 'block';
+             mainContent.style.display = 'block';
              articlePage.style.display = 'none';
              window.scrollTo({ top: 0, behavior: 'auto' });
              window.removeEventListener('scroll', handleArticleScroll);
         }
 
         function showArticle() {
-            homepage.style.display = 'none';
+            mainContent.style.display = 'none';
             articlePage.style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'auto' });
             initializeArticleFeatures();
@@ -1065,6 +1128,15 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
                 });
             }
         });
+        const backToTop = document.getElementById("backToTop");
+        window.addEventListener("scroll", () => {
+            backToTop.classList.toggle("show", window.scrollY > 300);
+        });
+        backToTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
     </script>
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 </body>
 </html>
