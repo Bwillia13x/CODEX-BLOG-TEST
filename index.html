@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Insights on technology, design and web development.">
+    <meta name="keywords" content="blog, technology, design, tutorials">
     <title>Modern Blog</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,6 +135,21 @@
         }
         .theme-toggle:hover svg {
             fill: var(--text-primary);
+        }
+
+        .search-input {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
         }
 
         /* Hero Section */
@@ -527,6 +544,24 @@
         }
         .share-btn svg { fill: currentColor; }
 
+        /* Comments */
+        .comments-section { margin: 2rem 0 4rem; }
+        .comment-form { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .comment-form input,
+        .comment-form textarea {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        .comment-form textarea { resize: vertical; min-height: 120px; }
+        .comment-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+        .comment-item { background-color: var(--bg-secondary); padding: 1rem; border-radius: var(--radius); }
+        .comment-author { font-weight: 600; margin-bottom: 0.25rem; }
+        .comment-date { font-size: 0.875rem; color: var(--text-tertiary); margin-bottom: 0.5rem; }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .toc { display: none; }
@@ -573,6 +608,7 @@
                     </svg>
                 </button>
             </div>
+            <input type="search" id="searchInput" class="search-input" placeholder="Search..." aria-label="Search posts">
         </nav>
     </header>
 
@@ -711,6 +747,15 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
                          <span>Copy Link</span>
                     </a>
                 </div>
+            </div>
+            <div class="comments-section">
+                <h3>Join the conversation</h3>
+                <form id="commentForm" class="comment-form">
+                    <input type="text" id="commentName" placeholder="Your name" required>
+                    <textarea id="commentText" placeholder="Your comment" required></textarea>
+                    <button type="submit" class="btn-primary">Post Comment</button>
+                </form>
+                <ul id="commentList" class="comment-list"></ul>
             </div>
         </div>
     </article>
@@ -875,6 +920,54 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
             
             document.getElementById('progressBar').style.width = `${Math.min(100, Math.max(0, progress))}%`;
         }
+
+        // --- Post Search ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const posts = document.querySelectorAll('.post-card');
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase();
+                    posts.forEach(post => {
+                        const content = post.innerText.toLowerCase();
+                        post.style.display = content.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+            // Comments
+            const commentForm = document.getElementById('commentForm');
+            const commentList = document.getElementById('commentList');
+            const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+
+            function renderComments() {
+                commentList.innerHTML = '';
+                comments.forEach(c => {
+                    const li = document.createElement('li');
+                    li.className = 'comment-item';
+                    li.innerHTML = `<div class="comment-author">${c.name}</div>` +
+                                   `<div class="comment-date">${c.date}</div>` +
+                                   `<div class="comment-text">${c.text}</div>`;
+                    commentList.appendChild(li);
+                });
+            }
+
+            renderComments();
+
+            if (commentForm) {
+                commentForm.addEventListener('submit', e => {
+                    e.preventDefault();
+                    const name = document.getElementById('commentName').value.trim();
+                    const text = document.getElementById('commentText').value.trim();
+                    if (!name || !text) return;
+                    const newComment = { name, text, date: new Date().toLocaleString() };
+                    comments.push(newComment);
+                    localStorage.setItem('comments', JSON.stringify(comments));
+                    e.target.reset();
+                    renderComments();
+                });
+            }
+        });
     </script>
 </body>
 </html>
