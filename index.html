@@ -20,7 +20,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.xml">
     <script defer src="nav.js"></script>
+    <script defer src="advanced.js"></script>
     <style>
         /* CSS Custom Properties for Theming */
         :root {
@@ -394,6 +396,18 @@
             gap: 0.75rem;
         }
 
+        .post-nav a { color: var(--accent); text-decoration: none; }
+
+        .bookmark-btn {
+            margin-left: 0.5rem;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+        }
+        .bookmark-btn.active { color: var(--accent); }
+
         /* Article Page */
         .article-container {
             max-width: var(--article-width);
@@ -704,6 +718,9 @@
                 <a href="topics.html">Topics</a>
                 <a href="about.html">About</a>
                 <a href="contact.html">Contact</a>
+                <a href="bookmarks.html">Bookmarks</a>
+                <a href="search.html">Search</a>
+                <a href="login.html" id="accountLink">Login</a>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="sunIcon">
                         <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
@@ -732,33 +749,36 @@
             <h2 class="section-title">Featured Articles</h2>
             <div class="featured-grid">
                 <!-- Post 1 -->
-                <article class="post-card" onclick="showArticle()">
+                <article class="post-card" data-id="design" data-category="design" onclick="showArticle()">
                     <img src="https://placehold.co/600x300/3b82f6/ffffff?text=Design" alt="Abstract design shapes" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
                     <div class="post-content">
                         <div class="post-meta"><span class="post-category">Design</span><span>•</span><span>5 min read</span></div>
                         <h3 class="post-title">Building Beautiful and Functional Blog Interfaces</h3>
                         <p class="post-excerpt">Discover the principles behind creating blog interfaces that readers love, combining aesthetics with usability.</p>
                         <a href="#" class="read-more" onclick="event.stopPropagation(); showArticle();">Read more →</a>
+                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('design')">&#9734;</button>
                     </div>
                 </article>
                 <!-- Post 2 -->
-                <article class="post-card">
+                <article class="post-card" data-id="future-web" data-category="technology">
                     <img src="https://placehold.co/600x300/60a5fa/ffffff?text=Tech" alt="Circuit board pattern" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
                     <div class="post-content">
                         <div class="post-meta"><span class="post-category">Technology</span><span>•</span><span>8 min read</span></div>
                         <h3 class="post-title">The Future of Web Development: Trends to Watch</h3>
                         <p class="post-excerpt">An in-depth look at emerging technologies and methodologies shaping the future of web development.</p>
                         <a href="#" class="read-more">Read more →</a>
+                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('future-web')">&#9734;</button>
                     </div>
                 </article>
                 <!-- Post 3 -->
-                <article class="post-card">
+                <article class="post-card" data-id="css-layouts" data-category="tutorial">
                     <img src="https://placehold.co/600x300/34d399/ffffff?text=Tutorial" alt="Code on a screen" class="post-image" onerror="this.onerror=null;this.src='https://placehold.co/600x300/cccccc/ffffff?text=Image+Error';">
                     <div class="post-content">
                         <div class="post-meta"><span class="post-category">Tutorial</span><span>•</span><span>12 min read</span></div>
                         <h3 class="post-title">A Complete Guide to Modern CSS Layouts</h3>
                         <p class="post-excerpt">Master CSS Grid and Flexbox with practical examples and best practices for responsive design.</p>
                         <a href="#" class="read-more">Read more →</a>
+                        <button class="bookmark-btn" aria-label="Bookmark article" onclick="event.stopPropagation(); toggleBookmark('css-layouts')">&#9734;</button>
                     </div>
                 </article>
             </div>
@@ -836,6 +856,7 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                 <p>Building a beautiful and functional blog interface is an iterative process. Start with solid foundations, gather feedback from your readers, and continuously refine your design. Remember, the best blog design is one that gets out of the way and lets your content shine.</p>
             </div>
 
+            <button id="clapBtn" class="btn-primary" style="margin-top:2rem;" onclick="addClap()">👏 <span id="clapCount">0</span></button>
             <div class="share-section">
                 <h3 class="share-title">Share this article</h3>
                 <div class="share-buttons">
@@ -853,6 +874,11 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                     </a>
                 </div>
             </div>
+            <nav class="post-nav" style="margin-top:2rem;">
+                <a href="index.html#future-web">← Previous</a>
+                <a href="index.html#css-layouts" style="float:right;">Next →</a>
+            </nav>
+            <div id="related" style="margin-top:2rem;"></div>
             <div class="comments-section">
                 <h3>Join the conversation</h3>
                 <form id="commentForm" class="comment-form">
@@ -896,15 +922,26 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             }
             
             // --- Newsletter Form ---
-            document.querySelector('.newsletter-form').addEventListener('submit', (e) => {
+            document.querySelector('.newsletter-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const button = e.target.querySelector('button');
-                button.textContent = 'Subscribed!';
+                const form = e.target;
+                const email = form.querySelector('input').value;
+                const button = form.querySelector('button');
+                try {
+                    await fetch('https://example.com/api/newsletter', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    button.textContent = 'Subscribed!';
+                } catch {
+                    button.textContent = 'Error';
+                }
                 button.disabled = true;
                 setTimeout(() => {
                     button.textContent = 'Subscribe';
                     button.disabled = false;
-                    e.target.reset();
+                    form.reset();
                 }, 3000);
             });
             
@@ -964,6 +1001,7 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             setupTocObserver();
             addCodeBlockHeaders();
             setupShareButtons();
+            showRelatedPosts();
             window.addEventListener('scroll', handleArticleScroll);
             
             isArticleInitialized = true;
@@ -1088,6 +1126,21 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
             });
         }
 
+        // --- Related Posts ---
+        function showRelatedPosts() {
+            const container = document.getElementById('related');
+            if (!container) return;
+            const posts = getPosts().filter(p => p.id !== 'design'); // current article id
+            container.innerHTML = '<h3>Related Posts</h3>';
+            posts.forEach(p => {
+                const a = document.createElement('a');
+                a.href = `index.html#${p.id}`;
+                a.textContent = p.title;
+                a.style.display = 'block';
+                container.appendChild(a);
+            });
+        }
+
         // --- Post Search ---
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('searchInput');
@@ -1119,12 +1172,22 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
 
             function renderComments() {
                 commentList.innerHTML = '';
-                comments.forEach(c => {
+                comments.forEach((c, idx) => {
                     const li = document.createElement('li');
                     li.className = 'comment-item';
-                    li.innerHTML = `<div class="comment-author">${c.name}</div>` +
-                                   `<div class="comment-date">${c.date}</div>` +
-                                   `<div class="comment-text">${c.text}</div>`;
+                    li.innerHTML = `<div class="comment-author">${c.name}</div>`+
+                                   `<div class="comment-date">${c.date}</div>`+
+                                   `<div class="comment-text">${c.text}</div>`+
+                                   `<button class="reply-btn" data-index="${idx}">Reply</button>`+
+                                   `<ul class="reply-list"></ul>`;
+                    const repliesUl = li.querySelector('.reply-list');
+                    (c.replies || []).forEach(r => {
+                        const rli = document.createElement('li');
+                        rli.innerHTML = `<div class="comment-author">${r.name}</div>`+
+                                         `<div class="comment-date">${r.date}</div>`+
+                                         `<div class="comment-text">${r.text}</div>`;
+                        repliesUl.appendChild(rli);
+                    });
                     commentList.appendChild(li);
                 });
             }
@@ -1137,13 +1200,27 @@ images.forEach(img =&gt; imageObserver.observe(img));</code></pre>
                     const name = document.getElementById('commentName').value.trim();
                     const text = document.getElementById('commentText').value.trim();
                     if (!name || !text) return;
-                    const newComment = { name, text, date: new Date().toLocaleString() };
+                    const newComment = { name, text, date: new Date().toLocaleString(), replies: [] };
                     comments.push(newComment);
                     localStorage.setItem('comments', JSON.stringify(comments));
                     e.target.reset();
                     renderComments();
                 });
             }
+
+            commentList.addEventListener('click', e => {
+                if (e.target.classList.contains('reply-btn')) {
+                    const index = parseInt(e.target.dataset.index, 10);
+                    const name = prompt('Your name');
+                    const text = prompt('Your reply');
+                    if (!name || !text) return;
+                    const reply = { name, text, date: new Date().toLocaleString() };
+                    comments[index].replies = comments[index].replies || [];
+                    comments[index].replies.push(reply);
+                    localStorage.setItem('comments', JSON.stringify(comments));
+                    renderComments();
+                }
+            });
         });
         const backToTop = document.getElementById("backToTop");
         window.addEventListener("scroll", () => {
