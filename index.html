@@ -513,6 +513,31 @@
             transform: translateX(5px);
             border-left-color: var(--accent);
         }
+        .toc-sublist { list-style: none; padding-left: 1rem; }
+        .toc-item.h3 .toc-link { font-size: 0.8rem; padding-left: 0.5rem; border-left-style: dashed; }
+
+        /* Code Block Headers */
+        .code-block-wrapper { margin: 2.5rem 0; }
+        .code-header {
+            background-color: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-top-left-radius: var(--radius);
+            border-top-right-radius: var(--radius);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .copy-code-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .share-btn { cursor: pointer; }
 
         /* Share Section */
         .share-section {
@@ -805,28 +830,28 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
             
             // --- Copy Link Functionality ---
             document.addEventListener('click', (e) => {
-                const copyBtn = e.target.closest('.copy-link-btn');
-                if (copyBtn) {
+                const copyLinkBtn = e.target.closest('.copy-link-btn');
+                if (copyLinkBtn) {
                     e.preventDefault();
                     const textToCopy = window.location.href;
 
-                    const tempInput = document.createElement("input");
-                    tempInput.value = textToCopy;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    
-                    try {
-                        document.execCommand('copy');
-                        const originalContent = copyBtn.innerHTML;
-                        copyBtn.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                            <span>Copied!</span>
-                        `;
-                        setTimeout(() => { copyBtn.innerHTML = originalContent; }, 2000);
-                    } catch (err) {
-                        console.error('Fallback: Oops, unable to copy', err);
-                    }
-                    document.body.removeChild(tempInput);
+                    navigator.clipboard?.writeText(textToCopy).then(() => {
+                        const originalContent = copyLinkBtn.innerHTML;
+                        copyLinkBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M20.285 6.457l-11.57 11.57-4.285-4.286 1.414-1.414 2.871 2.871 10.156-10.156z"/></svg><span>Copied!</span>`;
+                        setTimeout(() => { copyLinkBtn.innerHTML = originalContent; }, 2000);
+                    }).catch(err => console.error('Clipboard error', err));
+                }
+
+                const copyCodeBtn = e.target.closest('.copy-code-btn');
+                if (copyCodeBtn) {
+                    e.preventDefault();
+                    const code = copyCodeBtn.closest('.code-block-wrapper')?.querySelector('pre code')?.innerText;
+                    if (!code) return;
+                    navigator.clipboard?.writeText(code).then(() => {
+                        const original = copyCodeBtn.textContent;
+                        copyCodeBtn.textContent = 'Copied!';
+                        setTimeout(() => { copyCodeBtn.textContent = original; }, 2000);
+                    }).catch(err => console.error('Clipboard error', err));
                 }
             });
         });
@@ -856,6 +881,9 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
             if (isArticleInitialized) return;
             
             buildTableOfContents();
+            setupTocObserver();
+            addCodeBlockHeaders();
+            setupShareButtons();
             window.addEventListener('scroll', handleArticleScroll);
             
             isArticleInitialized = true;
@@ -863,42 +891,61 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
         
         function handleArticleScroll() {
             updateProgressBar();
-            updateTocActiveState();
         }
 
         // --- Table of Contents ---
         function buildTableOfContents() {
             const tocList = document.getElementById('tocList');
-            const sections = document.querySelectorAll('.article-content h2');
+            const headings = document.querySelectorAll('.article-content h2, .article-content h3');
             tocList.innerHTML = ''; // Clear existing
-            sections.forEach(section => {
-                const title = section.textContent;
-                const id = section.id;
+            let currentH2Li = null;
+
+            headings.forEach(heading => {
+                const title = heading.textContent;
+                const id = heading.id;
                 const listItem = document.createElement('li');
-                listItem.classList.add('toc-item');
+                const level = heading.tagName.toLowerCase();
+                listItem.classList.add('toc-item', level);
                 listItem.innerHTML = `<a href="#${id}" class="toc-link">${title}</a>`;
-                tocList.appendChild(listItem);
+
+                if (level === 'h2') {
+                    tocList.appendChild(listItem);
+                    currentH2Li = listItem; // track latest h2 for nesting
+                } else if (level === 'h3' && currentH2Li) {
+                    let subList = currentH2Li.querySelector('ul');
+                    if (!subList) {
+                        subList = document.createElement('ul');
+                        subList.classList.add('toc-sublist');
+                        currentH2Li.appendChild(subList);
+                    }
+                    subList.appendChild(listItem);
+                }
             });
         }
 
-        function updateTocActiveState() {
-            const sections = document.querySelectorAll('.article-content h2');
-            const tocLinks = document.querySelectorAll('.toc-link');
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollY >= sectionTop - 100) {
-                    current = section.getAttribute('id');
-                }
-            });
+        // IntersectionObserver to highlight active heading
+        function setupTocObserver() {
+            const headings = document.querySelectorAll('.article-content h2, .article-content h3');
+            if (!headings.length) return;
 
-            tocLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -70% 0px', // trigger when heading crosses 30% from top
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        document.querySelectorAll('.toc-link').forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            headings.forEach(h => observer.observe(h));
         }
 
         // --- Progress Bar ---
@@ -906,19 +953,59 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
             const articleContent = document.querySelector('.article-content');
             if (!articleContent) return;
 
-            const articleTop = articleContent.offsetTop;
-            const contentHeight = articleContent.scrollHeight;
-            const windowHeight = window.innerHeight;
-            const scrollableHeight = contentHeight - windowHeight;
-            const scrollTop = window.scrollY;
-            
+            const rect = articleContent.getBoundingClientRect();
+            const articleHeight = articleContent.scrollHeight;
+            const viewportHeight = window.innerHeight;
+            const totalScroll = articleHeight - viewportHeight;
+
             let progress = 0;
-            if (scrollTop > articleTop) {
-                const scrolled = scrollTop - articleTop;
-                progress = (scrolled / scrollableHeight) * 100;
+            if (rect.top < 0) {
+                progress = (-rect.top / totalScroll) * 100;
             }
-            
-            document.getElementById('progressBar').style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            progress = Math.min(100, Math.max(0, progress));
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // --- Code Block Headers ---
+        function addCodeBlockHeaders() {
+            document.querySelectorAll('.article-content pre').forEach(pre => {
+                if (pre.parentElement && pre.parentElement.classList.contains('code-block-wrapper')) return;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+
+                const header = document.createElement('div');
+                header.className = 'code-header';
+
+                const langClass = pre.querySelector('code')?.className || '';
+                const lang = langClass.replace('language-', '') || 'code';
+                header.innerHTML = `<span class="code-lang">${lang}</span><button class="copy-code-btn" aria-label="Copy code">Copy</button}`;
+
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(header);
+                wrapper.appendChild(pre);
+            });
+        }
+
+        // --- Share Buttons ---
+        function setupShareButtons() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.querySelector('.article-title')?.innerText || document.title);
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                const text = btn.textContent.trim().toLowerCase();
+                let shareUrl = '';
+                if (text.includes('twitter')) {
+                    shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
+                } else if (text.includes('linkedin')) {
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                }
+                if (shareUrl) {
+                    btn.href = shareUrl;
+                    btn.addEventListener('click', e => {
+                        e.preventDefault();
+                        window.open(shareUrl, '_blank', 'width=600,height=500');
+                    });
+                }
+            });
         }
 
         // --- Post Search ---
@@ -929,11 +1016,21 @@ images.forEach(img => imageObserver.observe(img));</code></pre>
                 searchInput.addEventListener('input', () => {
                     const query = searchInput.value.toLowerCase();
                     posts.forEach(post => {
-                        const content = post.innerText.toLowerCase();
-                        post.style.display = content.includes(query) ? '' : 'none';
+                        const title = post.querySelector('.post-title')?.innerText.toLowerCase() || '';
+                        const excerpt = post.querySelector('.post-excerpt')?.innerText.toLowerCase() || '';
+                        const category = post.querySelector('.post-category')?.innerText.toLowerCase() || '';
+                        const matches = title.includes(query) || excerpt.includes(query) || category.includes(query);
+                        post.style.display = matches ? '' : 'none';
                     });
                 });
             }
+
+            // Set lazy loading for all images
+            document.querySelectorAll('img').forEach(img => {
+                if (!img.hasAttribute('loading')) {
+                    img.setAttribute('loading', 'lazy');
+                }
+            });
 
             // Comments
             const commentForm = document.getElementById('commentForm');
